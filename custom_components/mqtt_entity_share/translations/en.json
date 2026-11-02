@@ -1,0 +1,163 @@
+{
+  "title": "MQTT Entity Share",
+  "config": {
+    "step": {
+      "user": {
+        "title": "MQTT-Freigabe einrichten",
+        "description": "Die Freigabe verwendet die vorhandene MQTT-Verbindung. Auf dem Empfänger muss der MQTT-Discovery-Präfix zum hier gewählten Präfix passen. Ein eigener Präfix verhindert, dass der Sender seine Freigaben selbst importiert.",
+        "data": {
+          "base_topic": "Themenpfad für Zustände und Befehle",
+          "discovery_topic": "Discovery-Präfix für den Empfänger"
+        }
+      },
+      "filters": {
+        "title": "Nach Raum und Art filtern",
+        "description": "Wähle für diese Runde zum Beispiel Licht, anschließend in einer neuen Runde Schalter oder Rollläden. Räume und Suche grenzen die Treffer weiter ein. Deine gesamte bisherige Auswahl bleibt erhalten.\n\n**Gesammelt: {summary}**",
+        "data": {
+          "areas": "Räume (Mehrfachauswahl)",
+          "types": "Art / Typ (Mehrfachauswahl)",
+          "search": "Suche nach Name oder Entitäts-ID"
+        }
+      },
+      "entities": {
+        "title": "Entitäten per Häkchen auswählen",
+        "description": "**{count} Treffer · Seite {page} von {pages}**\n\n**Gesammelt: {summary}**\n\nWähle mehrere Entitäten per Häkchen und klicke auf OK. Danach kannst du direkt weitere Typen hinzufügen oder die Gesamtauswahl prüfen. Noch wird nichts freigegeben.",
+        "data": {
+          "entities": "Entitäten dieser Seite"
+        }
+      },
+      "review": {
+        "title": "Freigaben und Rechte prüfen",
+        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nManuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}",
+        "data": {
+          "entities": "Manuell freigeben",
+          "control_entities": "Davon zusätzlich steuerbar",
+          "exclude_entities": "Nie freigeben (auch bei Label)",
+          "action": "Weiter mit …"
+        }
+      },
+      "confirm": {
+        "title": "Freigabe speichern",
+        "description": "**{count} Freigaben: {read} nur lesen · {control} steuerbar**\n\n{entities}\n\nLabel-Zuweisungen werden nach dem Speichern automatisch berücksichtigt. Bei nur lesbaren Freigaben weist die sendende Instanz Steuerbefehle zurück.",
+        "data": {
+          "action": "Aktion"
+        }
+      },
+      "round": {
+        "title": "Auswahl übernommen – wie weiter?",
+        "description": "**Gesammelt: {summary}**\n\n**{selected} Entitäten insgesamt.** Du kannst jetzt zum Beispiel nach den Lampen die Schalter ergänzen. Die bisherige Auswahl bleibt erhalten.\n\nAlle auswählen / abwählen bezieht sich nur auf die {matches} Treffer des letzten Filters.",
+        "menu_options": {
+          "more": "Übernehmen & weitere auswählen",
+          "review": "Gesamtauswahl prüfen",
+          "select_all": "Alle Treffer dieser Runde auswählen",
+          "clear_matches": "Treffer dieser Runde abwählen",
+          "next_page": "Weitere Treffer dieser Runde anzeigen",
+          "previous_page": "Vorherige Trefferseite"
+        }
+      },
+      "mode": {
+        "title": "Freigabe-Modus wählen",
+        "description": "Liste: feste Auswahl. Labels: automatisch anhand deiner Labels. Hybrid: Labels plus manuelle Auswahl und Ausschlüsse. Empfangene MQTT-Share-Entitäten werden nicht erneut geteilt.",
+        "data": {
+          "mode": "Auswahl der Freigaben"
+        }
+      },
+      "labels": {
+        "title": "Labels für diese Instanz",
+        "description": "Wähle vorhandene Labels oder gib Namen für neue Labels ein. Bei vorhandener Auswahl wird das Namensfeld ignoriert. Neue Labels werden erst beim abschließenden Speichern angelegt. Labels an Geräten gelten für deren unterstützte Entitäten. Bei beiden Labels gilt Steuerung.",
+        "data": {
+          "read_label": "Vorhandenes Label: nur lesen",
+          "read_label_name": "Neues Label: nur lesen",
+          "control_label": "Vorhandenes Label: steuerbar",
+          "control_label_name": "Neues Label: steuerbar"
+        }
+      }
+    },
+    "error": {
+      "invalid_topic": "Bitte einen eigenen Discovery-Präfix ohne Schrägstriche und einen gültigen Themenpfad verwenden (kein homeassistant).",
+      "invalid_entities": "Die Auswahl enthält nicht verfügbare oder nicht unterstützte Entitäten.",
+      "missing_label": "Das Label existiert nicht mehr. Bitte erneut wählen.",
+      "label_required": "Bitte ein bestehendes Label wählen oder einen Namen eingeben.",
+      "same_label": "Für Lesen und Steuern bitte unterschiedliche Labels verwenden."
+    },
+    "abort": {
+      "single_instance_allowed": "Die Freigabe ist bereits eingerichtet. Bitte die Optionen der vorhandenen Integration öffnen.",
+      "invalid_selection": "Die Auswahl hat sich geändert. Bitte den Dialog erneut öffnen."
+    }
+  },
+  "options": {
+    "step": {
+      "filters": {
+        "title": "Nach Raum und Art filtern",
+        "description": "Wähle für diese Runde zum Beispiel Licht, anschließend in einer neuen Runde Schalter oder Rollläden. Räume und Suche grenzen die Treffer weiter ein. Deine gesamte bisherige Auswahl bleibt erhalten.\n\n**Gesammelt: {summary}**",
+        "data": {
+          "areas": "Räume (Mehrfachauswahl)",
+          "types": "Art / Typ (Mehrfachauswahl)",
+          "search": "Suche nach Name oder Entitäts-ID"
+        }
+      },
+      "entities": {
+        "title": "Entitäten per Häkchen auswählen",
+        "description": "**{count} Treffer · Seite {page} von {pages}**\n\n**Gesammelt: {summary}**\n\nWähle mehrere Entitäten per Häkchen und klicke auf OK. Danach kannst du direkt weitere Typen hinzufügen oder die Gesamtauswahl prüfen. Noch wird nichts freigegeben.",
+        "data": {
+          "entities": "Entitäten dieser Seite"
+        }
+      },
+      "review": {
+        "title": "Freigaben und Rechte prüfen",
+        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nManuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}",
+        "data": {
+          "entities": "Manuell freigeben",
+          "control_entities": "Davon zusätzlich steuerbar",
+          "exclude_entities": "Nie freigeben (auch bei Label)",
+          "action": "Weiter mit …"
+        }
+      },
+      "confirm": {
+        "title": "Freigabe speichern",
+        "description": "**{count} Freigaben: {read} nur lesen · {control} steuerbar**\n\n{entities}\n\nLabel-Zuweisungen werden nach dem Speichern automatisch berücksichtigt. Bei nur lesbaren Freigaben weist die sendende Instanz Steuerbefehle zurück.",
+        "data": {
+          "action": "Aktion"
+        }
+      },
+      "round": {
+        "title": "Auswahl übernommen – wie weiter?",
+        "description": "**Gesammelt: {summary}**\n\n**{selected} Entitäten insgesamt.** Du kannst jetzt zum Beispiel nach den Lampen die Schalter ergänzen. Die bisherige Auswahl bleibt erhalten.\n\nAlle auswählen / abwählen bezieht sich nur auf die {matches} Treffer des letzten Filters.",
+        "menu_options": {
+          "more": "Übernehmen & weitere auswählen",
+          "review": "Gesamtauswahl prüfen",
+          "select_all": "Alle Treffer dieser Runde auswählen",
+          "clear_matches": "Treffer dieser Runde abwählen",
+          "next_page": "Weitere Treffer dieser Runde anzeigen",
+          "previous_page": "Vorherige Trefferseite"
+        }
+      },
+      "mode": {
+        "title": "Freigabe-Modus wählen",
+        "description": "Liste: feste Auswahl. Labels: automatisch anhand deiner Labels. Hybrid: Labels plus manuelle Auswahl und Ausschlüsse. Empfangene MQTT-Share-Entitäten werden nicht erneut geteilt.",
+        "data": {
+          "mode": "Auswahl der Freigaben"
+        }
+      },
+      "labels": {
+        "title": "Labels für diese Instanz",
+        "description": "Wähle vorhandene Labels oder gib Namen für neue Labels ein. Bei vorhandener Auswahl wird das Namensfeld ignoriert. Neue Labels werden erst beim abschließenden Speichern angelegt. Labels an Geräten gelten für deren unterstützte Entitäten. Bei beiden Labels gilt Steuerung.",
+        "data": {
+          "read_label": "Vorhandenes Label: nur lesen",
+          "read_label_name": "Neues Label: nur lesen",
+          "control_label": "Vorhandenes Label: steuerbar",
+          "control_label_name": "Neues Label: steuerbar"
+        }
+      }
+    },
+    "error": {
+      "invalid_entities": "Die Auswahl enthält nicht verfügbare oder nicht unterstützte Entitäten.",
+      "missing_label": "Das Label existiert nicht mehr. Bitte erneut wählen.",
+      "label_required": "Bitte ein bestehendes Label wählen oder einen Namen eingeben.",
+      "same_label": "Für Lesen und Steuern bitte unterschiedliche Labels verwenden."
+    },
+    "abort": {
+      "invalid_selection": "Die Auswahl hat sich geändert. Bitte den Dialog erneut öffnen."
+    }
+  }
+}

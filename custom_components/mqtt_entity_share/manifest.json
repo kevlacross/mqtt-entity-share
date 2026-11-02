@@ -1,0 +1,20 @@
+{
+  "domain": "mqtt_entity_share",
+  "name": "MQTT Entity Share",
+  "after_dependencies": [
+    "tag"
+  ],
+  "codeowners": [
+    "@kevlacross"
+  ],
+  "dependencies": [
+    "mqtt"
+  ],
+  "documentation": "https://github.com/kevlacross/mqtt-entity-share",
+  "integration_type": "hub",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/kevlacross/mqtt-entity-share/issues",
+  "requirements": [],
+  "version": "0.3.0",
+  "config_flow": true
+}
