@@ -1,6 +1,6 @@
 # MQTT Entity Share
 
-Custom Home Assistant integration for selectively exporting entities through MQTT discovery. Version 0.3.0 is an early test release, tested with Home Assistant 2026.10.4.
+Custom Home Assistant integration for selectively exporting entities through MQTT discovery. Version 0.4.0 is an early test release, tested with Home Assistant 2026.10.4.
 
 ## Install with HACS
 
@@ -11,7 +11,7 @@ Custom Home Assistant integration for selectively exporting entities through MQT
 
 ## Requirements and transport
 
-The built-in MQTT integration must already be configured. This integration publishes through that existing connection: it does not configure a broker, bridge, TLS, WebSockets or a remote MQTT connection. Configure those separately. The receiver must receive the shared discovery and state topics, and its MQTT discovery prefix must match the configured sharing prefix. Do not change an existing discovery prefix without checking effects on existing MQTT devices.
+The built-in MQTT integration must already be configured. This integration publishes through that existing connection: it does not configure a broker. Optionally enable the secure WebSocket bridge in initial setup to connect a remote sharing broker while retaining your local MQTT integration. The bridge uses TLS certificate verification, port 443 by default and path `/mqtt`. Supply a peer state root and peer source ID. The opposite broker must route discovery, states and commands and enforce per-source ACLs. The receiver must receive the shared discovery and state topics, and its MQTT discovery prefix must match the configured sharing prefix. Do not change an existing discovery prefix without checking effects on existing MQTT devices.
 
 For two-way sharing, install on both instances and use different state/command roots (for example `ha_share/source_a` and `ha_share/source_b`). Configure discovery routing, bridge directions and broker ACLs for both sources. Installing the integration alone does not create a bidirectional connection.
 

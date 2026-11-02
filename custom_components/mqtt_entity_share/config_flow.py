@@ -357,10 +357,35 @@ class ShareConfigFlow(SelectionSteps, config_entries.ConfigFlow, domain=DOMAIN):
             else:
                 self.settings = {"base_topic": base, "discovery_topic": prefix,
                                  "source_id": "share_" + uuid.uuid4().hex[:10]}
+                if user_input.get("use_remote_bridge", False):
+                    return await self.async_step_bridge()
                 return await self.async_step_mode()
         return self.async_show_form(step_id="user", errors=errors, data_schema=vol.Schema({
             vol.Required("base_topic", default="ha_share/source_a"): str,
             vol.Required("discovery_topic", default="ha_share"): str,
+            vol.Optional("use_remote_bridge", default=False): bool,
+        }))
+
+    async def async_step_bridge(self, user_input=None):
+        errors = {}
+        if user_input is not None:
+            peer_base = user_input["peer_base_topic"].strip("/")
+            peer_id = user_input["peer_source_id"]
+            if (not re.fullmatch(r"[a-zA-Z0-9_/-]+", peer_base)
+                    or peer_base == self.settings["base_topic"]
+                    or not re.fullmatch(r"share_[0-9a-f]{10}", peer_id)):
+                errors["base"] = "invalid_peer"
+            else:
+                self.settings["remote_bridge"] = {**user_input, "peer_base_topic": peer_base}
+                return await self.async_step_mode()
+        return self.async_show_form(step_id="bridge", errors=errors, data_schema=vol.Schema({
+            vol.Required("host"): str,
+            vol.Required("port", default=443): vol.All(vol.Coerce(int), vol.Range(min=1,max=65535)),
+            vol.Required("username"): str,
+            vol.Required("password"): selector.TextSelector(selector.TextSelectorConfig(type=selector.TextSelectorType.PASSWORD)),
+            vol.Required("peer_base_topic"): str,
+            vol.Required("peer_source_id"): str,
+            vol.Required("local_discovery_prefix", default="homeassistant"): vol.All(str, vol.Match(r"^[a-zA-Z0-9_-]+$")),
         }))
 
     def _finish(self):

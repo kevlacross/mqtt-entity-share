@@ -7,7 +7,8 @@
         "description": "Die Freigabe verwendet die vorhandene MQTT-Verbindung. Auf dem Empfänger muss der MQTT-Discovery-Präfix zum hier gewählten Präfix passen. Ein eigener Präfix verhindert, dass der Sender seine Freigaben selbst importiert.",
         "data": {
           "base_topic": "Themenpfad für Zustände und Befehle",
-          "discovery_topic": "Discovery-Präfix für den Empfänger"
+          "discovery_topic": "Discovery-Präfix für den Empfänger",
+          "use_remote_bridge": "Entfernten Freigabe-Broker über sichere WebSockets anbinden"
         }
       },
       "filters": {
@@ -71,6 +72,19 @@
           "control_label": "Vorhandenes Label: steuerbar",
           "control_label_name": "Neues Label: steuerbar"
         }
+      },
+      "bridge": {
+        "title": "Verbindung zum Freigabe-Broker",
+        "description": "Die vorhandene MQTT-Verbindung bleibt erhalten. Nur Freigaben dieser Instanz und der angegebenen Gegenstelle werden weitergeleitet. TLS-Zertifikate werden geprüft. WebSocket-Pfad: /mqtt. Der lokale Discovery-Präfix muss zur bestehenden MQTT-Integration passen.",
+        "data": {
+          "host": "Broker-Hostname",
+          "port": "TLS-Port",
+          "username": "Benutzername",
+          "password": "Passwort",
+          "peer_base_topic": "Themenpfad der Gegenstelle",
+          "peer_source_id": "Quell-ID der Gegenstelle",
+          "local_discovery_prefix": "Discovery-Präfix des eigenen MQTT-Brokers"
+        }
       }
     },
     "error": {
@@ -78,7 +92,8 @@
       "invalid_entities": "Die Auswahl enthält nicht verfügbare oder nicht unterstützte Entitäten.",
       "missing_label": "Das Label existiert nicht mehr. Bitte erneut wählen.",
       "label_required": "Bitte ein bestehendes Label wählen oder einen Namen eingeben.",
-      "same_label": "Für Lesen und Steuern bitte unterschiedliche Labels verwenden."
+      "same_label": "Für Lesen und Steuern bitte unterschiedliche Labels verwenden.",
+      "invalid_peer": "Gültigen, unterschiedlichen Themenpfad und Quell-ID der Gegenstelle angeben."
     },
     "abort": {
       "single_instance_allowed": "Die Freigabe ist bereits eingerichtet. Bitte die Optionen der vorhandenen Integration öffnen.",
