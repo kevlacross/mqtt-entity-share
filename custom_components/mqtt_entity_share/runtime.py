@@ -30,6 +30,7 @@ class ShareRuntime:
         self.allowed = set()
         self.options = dict(entry.options)
         self._policy_pending = False
+        self._policy_dirty = False
         self.lock = asyncio.Lock()
         self.closed = False
         self.unsubscribers = []
@@ -92,12 +93,16 @@ class ShareRuntime:
 
     @callback
     def _schedule_policy_update(self):
-        if self.closed or self._policy_pending:
+        if self.closed:
+            return
+        self._policy_dirty = True
+        if self._policy_pending:
             return
         self._policy_pending = True
         async def apply():
             try:
-                if not self.closed:
+                while self._policy_dirty and not self.closed:
+                    self._policy_dirty = False
                     await self.async_apply(self.options)
             finally:
                 self._policy_pending = False
@@ -108,6 +113,10 @@ class ShareRuntime:
             await self._refresh()
 
     async def _refresh(self, now=None):
+        # Also reconcile labels periodically, recovering missed registry events.
+        if resolve_permissions(self.hass, self.options).readable != self.allowed:
+            await self.async_apply(self.options)
+            return
         for entity_id in sorted(self.allowed):
             await self.async_publish(entity_id)
 

@@ -1,6 +1,6 @@
 # MQTT Entity Share
 
-Custom Home Assistant integration for selectively exporting entities through MQTT discovery. Version 0.4.0 is an early test release, tested with Home Assistant 2026.10.4.
+Custom Home Assistant integration for selectively exporting entities through MQTT discovery. Version 0.4.1 is an early test release, tested with Home Assistant 2026.10.4.
 
 ## Install with HACS
 
@@ -32,3 +32,6 @@ Only one integration entry per instance is supported. The setup UI is currently 
 ## Credits
 
 Based on [MQTT DiscoveryStream Alt](https://github.com/RogerSelwyn/mqtt_discoverystream_ha) by Roger Selwyn. The original MIT license and copyright notice are preserved. This project adds a source-side setup/options UI, explicit selection, label policies, hybrid overrides and command permission enforcement. Please report issues with this fork here, rather than to the upstream project.
+
+### 0.4.1
+Fix rapid consecutive label edits: registry changes arriving during publication are reconciled again instead of being dropped. Periodic refresh also recovers missed selection changes.
