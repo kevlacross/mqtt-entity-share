@@ -1,37 +1,196 @@
-# MQTT Entity Share
+<div align="center">
 
-Custom Home Assistant integration for selectively exporting entities through MQTT discovery. Version 0.4.1 is an early test release, tested with Home Assistant 2026.10.4.
+![MQTT Entity Share – Dein Zuhause. Deine Freigaben.](assets/banner.svg)
 
-## Install with HACS
+**Zwei Home-Assistant-Instanzen verbinden. Gezielt teilen. Selbst entscheiden.**
 
-1. Open HACS → menu → Custom repositories.
-2. Add `https://github.com/kevlacross/mqtt-entity-share` with category **Integration**.
-3. Download **MQTT Entity Share** and restart Home Assistant.
-4. Open Settings → Devices & services → Add integration → MQTT Entity Share.
+[![HACS Custom Repository](https://img.shields.io/badge/HACS-Custom_Repository-41BDF5?style=flat-square)](#installation)
+[![Version 0.4.1](https://img.shields.io/badge/Version-0.4.1-3b82f6?style=flat-square)](#projektstatus)
+[![Home Assistant 2026.10+](https://img.shields.io/badge/Home_Assistant-2026.10%2B-18bcf2?style=flat-square)](#voraussetzungen)
+[![MIT License](https://img.shields.io/badge/Lizenz-MIT-22a987?style=flat-square)](LICENSE)
 
-## Requirements and transport
+[🚀 Installation](#installation) · [🏷️ Freigaben](#freigaben) · [🔌 Verbindung](#verbindung) · [💬 Fragen](#fragen) · [🇬🇧 English](docs/README.en.md)
 
-The built-in MQTT integration must already be configured. This integration publishes through that existing connection: it does not configure a broker. Optionally enable the secure WebSocket bridge in initial setup to connect a remote sharing broker while retaining your local MQTT integration. The bridge uses TLS certificate verification, port 443 by default and path `/mqtt`. Supply a peer state root and peer source ID. The opposite broker must route discovery, states and commands and enforce per-source ACLs. The receiver must receive the shared discovery and state topics, and its MQTT discovery prefix must match the configured sharing prefix. Do not change an existing discovery prefix without checking effects on existing MQTT devices.
+</div>
 
-For two-way sharing, install on both instances and use different state/command roots (for example `ha_share/source_a` and `ha_share/source_b`). Configure discovery routing, bridge directions and broker ACLs for both sources. Installing the integration alone does not create a bidirectional connection.
+---
 
-## Sharing modes
+## 🏡 Dein Smart Home darf verbunden sein – und trotzdem deins bleiben
 
-- **Liste**: manually select entities in rounds, filtered by type, room and search. Select which of those entities additionally accept control commands.
-- **Labels**: choose existing labels or create labels on final save. Suggested names are `MQTT-Share read` and `MQTT-Share control`. Labels on entities and devices are supported; device labels apply to supported entities belonging to that device. The control label wins when both apply.
-- **Hybrid**: labels plus manual permissions and exclusions. Exclusion wins over manual selection; manual permissions win over labels.
+Du möchtest ausgewählte Lampen, Sensoren oder Schalter in einer zweiten Home-Assistant-Instanz nutzen? **MQTT Entity Share** hilft dir dabei: Du bestimmst auf der sendenden Instanz, welche Entitäten geteilt werden und ob die Gegenstelle nur mitlesen oder auch steuern darf.
 
-Each source chooses its own labels. Label assignments are reevaluated automatically. Received MQTT Entity Share entities are excluded from export to prevent loops. The final review shows effective permissions and their origin.
+Ideal, wenn zum Beispiel ein zweiter Haushalt einen Sensor sehen oder eine freigegebene Lampe bedienen soll. Der Austausch kann in **beide Richtungen** laufen – mit getrennten Freigaben für jedes Zuhause.
 
-## Permissions and limitations
+### ✨ Das steckt drin
 
-The sending instance checks each incoming command against its current permissions. Read-only shares reject commands at the source. The receiver may still display actuator controls; these controls do not grant permission. Retained commands are rejected. Use authenticated brokers with narrow topic ACLs and encrypted remote transport.
+| | Funktion |
+| :---: | :--- |
+| 🎯 | **Gezielt auswählen:** feste Liste, Labels oder beides kombinieren. |
+| 🏷️ | **Einfach markieren:** Labels an einzelnen Entitäten oder ganzen Geräten vergeben. |
+| 🔐 | **Rechte selbst vergeben:** nur lesen oder zusätzlich Steuerbefehle erlauben. |
+| 🧭 | **Den Überblick behalten:** nach Raum, Typ und Name filtern; Auswahl in mehreren Runden sammeln. |
+| 🔄 | **Automatisch nachziehen:** geänderte Label-Zuweisungen werden neu ausgewertet. |
+| 🌉 | **Bestehendes MQTT behalten:** optionale WebSocket-Brücke für einen entfernten Freigabe-Broker. |
+| 🛑 | **Schleifen vermeiden:** empfangene MQTT-Share-Entitäten werden nicht erneut exportiert. |
 
-Only one integration entry per instance is supported. The setup UI is currently German, including the English translation fallback. Supported device behavior inherits the upstream MQTT DiscoveryStream implementation; not all entity types and commands have been tested end to end. No production reliability guarantee is implied by this early release.
+<a id="freigaben"></a>
 
-## Credits
+## 🏷️ So bestimmst du, was geteilt wird
 
-Based on [MQTT DiscoveryStream Alt](https://github.com/RogerSelwyn/mqtt_discoverystream_ha) by Roger Selwyn. The original MIT license and copyright notice are preserved. This project adds a source-side setup/options UI, explicit selection, label policies, hybrid overrides and command permission enforcement. Please report issues with this fork here, rather than to the upstream project.
+![Lese-Label, Steuer-Label und keine Freigabe im Vergleich](assets/labels.svg)
 
-### 0.4.1
-Fix rapid consecutive label edits: registry changes arriving during publication are reconciled again instead of being dropped. Periodic refresh also recovers missed selection changes.
+Die Namen sind Vorschläge. Du kannst im Setup vorhandene Labels auswählen oder eigene Namen angeben. Neue Labels werden erst beim abschließenden Speichern angelegt.
+
+> 💡 **Gerät oder einzelne Entität?** Ein Label am Gerät gilt für dessen unterstützte, nicht deaktivierte oder ausgeblendete Entitäten. Möchtest du nur die Lampe teilen, vergib das Label direkt an der Licht-Entität. So bleiben zusätzliche Einstellungen und Sensoren außen vor.
+
+### Drei Modi – passend zu deinem Alltag
+
+| Modus | So funktioniert’s | Gut für … |
+| :--- | :--- | :--- |
+| 📋 **Liste** | Entitäten per Häkchen auswählen und Steuerrechte je Entität vergeben. | eine feste, überschaubare Freigabe |
+| 🏷️ **Labels** | Freigaben automatisch aus deinen Lese- und Steuer-Labels ableiten. | Änderungen direkt an Geräten und Entitäten |
+| 🧩 **Hybrid** | Labels mit manuellen Rechten und Ausschlüssen kombinieren. | automatische Auswahl mit gezielten Ausnahmen |
+
+Im Hybrid-Modus gilt: **Ausschluss → manuelle Rechte → Labels**. Sind beide Labels gesetzt, gilt das Steuer-Label. Jede Instanz kann eigene Labels verwenden.
+
+<a id="installation"></a>
+
+## 🚀 Installation mit HACS
+
+**Als benutzerdefiniertes Repository hinzufügen:**
+
+1. Öffne **HACS → ⋮ → Benutzerdefinierte Repositories**.
+2. Trage diese Adresse ein:
+
+   ```text
+   https://github.com/kevlacross/mqtt-entity-share
+   ```
+
+3. Wähle als Typ **Integration** und füge das Repository hinzu.
+4. Lade **MQTT Entity Share** herunter und starte Home Assistant neu.
+5. Öffne **Einstellungen → Geräte & Dienste → Integration hinzufügen → MQTT Entity Share**.
+
+> ℹ️ Das Repository ist über HACS installierbar. Es ist derzeit **kein Eintrag im allgemeinen HACS-Standardkatalog**.
+
+### 🪄 Dein erster Durchlauf
+
+1. Lege einen eigenen MQTT-Themenpfad und Discovery-Präfix für deine Freigaben fest.
+2. Aktiviere bei Bedarf die entfernte WebSocket-Brücke und trage die Verbindungsdaten ein.
+3. Wähle **Liste**, **Labels** oder **Hybrid**.
+4. Prüfe die Übersicht mit den wirksamen Lese- und Steuerrechten und speichere die Freigabe.
+5. Im Label-Modus: Vergib deine Labels an den gewünschten Geräten oder Entitäten. 🎉
+
+**Auf der Gegenseite findest du empfangene Geräte und Entitäten unter:**
+
+**Einstellungen → Geräte & Dienste → MQTT**
+
+Unsere Integration verwaltet Freigaben und Verbindung; die normale MQTT-Integration legt die empfangenen Entitäten an.
+
+<a id="voraussetzungen"></a>
+
+## 🧰 Was du brauchst
+
+- **Home Assistant ab 2026.10**; bisher getestet mit 2026.10.4.
+- Eine bereits eingerichtete **MQTT-Integration** auf den beteiligten Instanzen.
+- Einen MQTT-Broker und passend eingerichtete Verbindungen zwischen den Standorten.
+- Für entfernten Zugriff: authentifizierte Zugänge, verschlüsselte Übertragung und passende Topic-Rechte (ACLs).
+
+<a id="verbindung"></a>
+
+## 🌉 Zwei Zuhause, eine gezielte Verbindung
+
+Die Integration verwendet deine vorhandene MQTT-Verbindung. Ein Broker wird dadurch nicht automatisch installiert.
+
+Für die Gegenseite kannst du beim ersten Setup optional die **sichere WebSocket-Brücke** einschalten. Sie verbindet den lokalen MQTT-Broker mit einem entfernten Freigabe-Broker, ohne die bestehende MQTT-Integration umzuschalten.
+
+| Einstellung | Bedeutung |
+| :--- | :--- |
+| **Host & Zugang** | Hostname, Benutzername und Passwort des Freigabe-Brokers |
+| **TLS-Port** | Standard: `443`; die Zertifikatsprüfung bleibt aktiv |
+| **WebSocket-Pfad** | `/mqtt` |
+| **Themenpfad & Quell-ID der Gegenstelle** | Bestimmen, welche Quelle über die Brücke empfangen wird |
+| **Lokaler Discovery-Präfix** | Muss zum bestehenden MQTT-Discovery deiner Instanz passen |
+
+Für **A ↔ B** installierst du die Integration auf beiden Seiten und verwendest unterschiedliche Themenpfade, zum Beispiel `ha_share/source_a` und `ha_share/source_b`. Broker-Brücken, Discovery-Routing und ACLs müssen für beide Richtungen passen. Die Installation allein stellt diese Verbindung noch nicht her.
+
+<details>
+<summary><strong>🔎 Details zu Discovery und bestehenden MQTT-Geräten</strong></summary>
+
+Die Empfängerseite muss die freigegebenen Discovery-Konfigurationen und Zustände erhalten. Ein eigener Freigabe-Präfix trennt den Export vom lokalen MQTT-Discovery. Die WebSocket-Brücke setzt empfangene Discovery-Topics auf den angegebenen lokalen Präfix um; eine externe Broker-Brücke benötigt ein entsprechendes Routing.
+
+Ändere den Discovery-Präfix einer bereits verwendeten MQTT-Integration erst, nachdem du die Auswirkungen auf vorhandene Geräte geprüft hast.
+
+</details>
+
+<a id="fragen"></a>
+
+## 💬 Häufige Fragen
+
+<details>
+<summary><strong>Wer entscheidet, was geteilt wird?</strong></summary>
+
+Die sendende Instanz. A legt fest, was B von A erhält. B legt unabhängig davon fest, was A von B erhält.
+
+</details>
+
+<details>
+<summary><strong>Kann die Gegenseite eine reine Lese-Freigabe trotzdem steuern?</strong></summary>
+
+Die sendende Instanz prüft jeden eingehenden Befehl gegen ihre aktuellen Rechte. Bei einer reinen Lese-Freigabe wird er zurückgewiesen. Die empfangene MQTT-Entität kann trotzdem Bedienelemente anzeigen; deren Sichtbarkeit erteilt keine Steuerberechtigung. Retained-Steuerbefehle werden ebenfalls abgewiesen.
+
+</details>
+
+<details>
+<summary><strong>Warum erscheinen mehr Entitäten als markierte Geräte?</strong></summary>
+
+Ein Gerät kann mehrere unterstützte Entitäten besitzen: zum Beispiel eine Lampe, Einstellungen und Sensoren. Ein Geräte-Label bezieht diese Entitäten mit ein. Setze das Label an einzelnen Entitäten, wenn du feiner auswählen möchtest. Deaktivierte und ausgeblendete Entitäten werden ausgeschlossen.
+
+</details>
+
+<details>
+<summary><strong>Warum ist eine neue Entität zunächst „unbekannt“?</strong></summary>
+
+Die Geräteerkennung kann vor dem ersten Zustandswert ankommen. Beim nächsten Update oder der regelmäßigen Aktualisierung – normalerweise spätestens nach etwa fünf Minuten – wird der Zustand nachgeliefert, sofern die Quelle erreichbar ist und einen gültigen Zustand hat.
+
+</details>
+
+<details>
+<summary><strong>Brauche ich für beide Seiten dieselben Label-Namen?</strong></summary>
+
+Nein. Du wählst die Labels pro Instanz. Gleiche Namen sind praktisch, aber keine Voraussetzung. Ein Label mit Steuerrechten hat Vorrang vor dem Lese-Label.
+
+</details>
+
+<a id="projektstatus"></a>
+
+## 🧪 Projektstatus
+
+**Frühe Testversion · aktuell 0.4.1**
+
+Die Auswahl- und Rechteprüfung sowie der Transport in beide Richtungen wurden getestet. Noch nicht jede unterstützte Geräteart und jeder Befehl ist Ende zu Ende geprüft. Pro Instanz wird ein Integrationseintrag unterstützt. Die Einrichtung ist derzeit deutschsprachig, auch im englischen Sprach-Fallback.
+
+**Neu in 0.4.1:** Schnell aufeinanderfolgende Label-Änderungen gehen während einer laufenden Veröffentlichung nicht mehr verloren. Zusätzlich gleicht die regelmäßige Aktualisierung die Auswahl erneut ab.
+
+## 🤝 Mitmachen & Rückmeldung
+
+Du hast einen Fehler entdeckt oder eine Idee für die nächste Verbesserung?
+
+[🐛 Fehler melden](https://github.com/kevlacross/mqtt-entity-share/issues/new) · [💡 Ideen und Fragen](https://github.com/kevlacross/mqtt-entity-share/issues)
+
+Bitte beschreibe deine Home-Assistant-Version, den gewählten Modus und das erwartete Verhalten. Entferne Passwörter, Tokens und private Verbindungsdaten aus Protokollen und Screenshots.
+
+## 💙 Danke an das ursprüngliche Projekt
+
+MQTT Entity Share basiert auf [MQTT DiscoveryStream Alt](https://github.com/RogerSelwyn/mqtt_discoverystream_ha) von Roger Selwyn. Die ursprüngliche **MIT-Lizenz und Copyright-Hinweise** bleiben erhalten.
+
+Dieses Projekt ergänzt die Freigabe-Oberfläche, manuelle Auswahl, Label- und Hybrid-Regeln, die Prüfung von Steuerrechten und eine optionale WebSocket-Brücke. Rückmeldungen zu dieser Variante bitte hier im Repository melden.
+
+---
+
+<div align="center">
+
+**🏡 Verbunden bleiben. Freigaben bewusst wählen.**
+
+[Nach oben ↑](#)
+
+</div>
