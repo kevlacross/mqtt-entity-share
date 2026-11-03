@@ -1,5 +1,6 @@
 """Configure sharing on the sending instance with native HA selectors."""
 import re
+from html import escape
 from collections import Counter
 import uuid
 
@@ -10,6 +11,7 @@ from homeassistant.helpers import area_registry as ar, device_registry as dr, en
 
 from .const import DOMAIN, SUPPORTED_ENTITY_TYPE_COMMANDS
 from .policy import resolve_permissions, supported
+from .received import received_overview
 
 
 def eligible_entities(hass):
@@ -62,6 +64,7 @@ class SelectionSteps:
     """Filter locally and keep an explicit draft until the final confirmation."""
     selected = None
     allow_commands = False
+    label_received = False
     mode = "list"
     control_entities = None
     exclude_entities = None
@@ -78,6 +81,7 @@ class SelectionSteps:
     async def async_step_mode(self, user_input=None):
         if user_input is not None:
             self.mode = user_input["mode"]
+            self.label_received = user_input.get("label_received", self.label_received)
             if self.mode in ("labels", "hybrid"):
                 return await self.async_step_labels()
             return await self.async_step_filters()
@@ -85,6 +89,7 @@ class SelectionSteps:
             vol.Required("mode", default=self.mode): selector.SelectSelector(selector.SelectSelectorConfig(
                 options=["list", "labels", "hybrid"], translation_key="sharing_mode",
                 mode=selector.SelectSelectorMode.LIST)),
+            vol.Optional("label_received", default=self.label_received): bool,
         }))
 
     async def async_step_labels(self, user_input=None):
@@ -120,7 +125,7 @@ class SelectionSteps:
         return self.async_show_form(step_id="labels", data_schema=vol.Schema(fields), errors=errors)
 
     def _options(self, create_labels=False):
-        options = {"mode": self.mode, "entities": self.selected or [],
+        options = {"label_received": self.label_received, "mode": self.mode, "entities": self.selected or [],
                    "control_entities": sorted(set(self.control_entities or []) & set(self.selected or [])),
                    "exclude_entities": self.exclude_entities or []}
         values = self.label_values or {}
@@ -402,11 +407,29 @@ class ShareOptionsFlow(SelectionSteps, config_entries.OptionsFlow):
     async def async_step_init(self, user_input=None):
         self.selected = list(self.config_entry.options.get("entities", []))
         self.allow_commands = self.config_entry.options.get("allow_commands", False)
+        self.label_received = self.config_entry.options.get("label_received", False)
         self.mode = self.config_entry.options.get("mode", "list")
         self.control_entities = list(self.config_entry.options.get("control_entities", self.selected if self.allow_commands else []))
         self.exclude_entities = list(self.config_entry.options.get("exclude_entities", []))
         self.label_values = {key: self.config_entry.options[key] for key in ("read_label", "control_label") if key in self.config_entry.options}
+        return self.async_show_menu(step_id="init", menu_options=["received", "sharing"])
+
+    async def async_step_sharing(self, user_input=None):
         return await self.async_step_mode(user_input)
+
+    async def async_step_received(self, user_input=None):
+        if user_input is not None:
+            return await self.async_step_init()
+        groups, loose = received_overview(self.hass)
+        # Render user-chosen names as text, not user-supplied Markdown links.
+        def plain(value):
+            return escape(str(value), quote=False).replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]").replace("\n", " ").replace("*", "\\*").replace("_", "\\_").replace("`", "")
+        devices = "\n".join(f'- [{plain(group["name"])}](/config/devices/device/{device_id}) · {len(group["entities"])}' for device_id, group in sorted(groups.items(), key=lambda item: item[1]["name"].casefold())) or "—"
+        standalone = "\n".join(f'- {plain(item["name"])} (`{item["entity_id"]}`)' for item in sorted(loose, key=lambda item: item["name"].casefold())) or "—"
+        return self.async_show_form(step_id="received", data_schema=vol.Schema({}), description_placeholders={
+            "devices": devices, "standalone": standalone, "device_count": str(len(groups)),
+            "entity_count": str(sum(len(group["entities"]) for group in groups.values()) + len(loose)),
+        })
 
     def _finish(self):
         return self.async_create_entry(title="", data=self._options(create_labels=True))

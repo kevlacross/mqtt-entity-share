@@ -58,9 +58,10 @@
       },
       "mode": {
         "title": "Choose a sharing mode",
-        "description": "List: a fixed selection. Labels: automatic selection based on labels. Hybrid: labels plus manual permissions and exclusions. Received MQTT Share entities are never exported again.",
+        "description": "List: a fixed selection. Labels: automatic selection based on labels. Hybrid: labels plus manual permissions and exclusions. Received MQTT Share entities are never exported again.\n\nFind received devices in the received-shares overview in MQTT Entity Share options; they remain in MQTT. The optional label grants no permissions. Turning it off removes only label assignments added automatically by this integration.",
         "data": {
-          "mode": "How to select shares"
+          "mode": "How to select shares",
+          "label_received": "Automatically label received entities with “MQTT-Share received”"
         }
       },
       "labels": {
@@ -149,9 +150,10 @@
       },
       "mode": {
         "title": "Choose a sharing mode",
-        "description": "List: a fixed selection. Labels: automatic selection based on labels. Hybrid: labels plus manual permissions and exclusions. Received MQTT Share entities are never exported again.",
+        "description": "List: a fixed selection. Labels: automatic selection based on labels. Hybrid: labels plus manual permissions and exclusions. Received MQTT Share entities are never exported again.\n\nFind received devices in the received-shares overview in MQTT Entity Share options; they remain in MQTT. The optional label grants no permissions. Turning it off removes only label assignments added automatically by this integration.",
         "data": {
-          "mode": "How to select shares"
+          "mode": "How to select shares",
+          "label_received": "Automatically label received entities with “MQTT-Share received”"
         }
       },
       "labels": {
@@ -163,6 +165,17 @@
           "control_label": "Existing label: controllable",
           "control_label_name": "New label: controllable"
         }
+      },
+      "init": {
+        "title": "MQTT Entity Share",
+        "menu_options": {
+          "received": "View received devices",
+          "sharing": "Edit sharing and received-label option"
+        }
+      },
+      "received": {
+        "title": "Received shares",
+        "description": "**{device_count} devices · {entity_count} entities**\n\nDevices and entities remain owned by MQTT. The number next to each device is its received entity count. Select a device name to open the original device.\n\n{devices}\n\n**Entities without a device**\n\n{standalone}\n\nThis view refreshes when opened. — = No entries."
       }
     },
     "error": {

@@ -7,6 +7,7 @@ from homeassistant.helpers.storage import Store
 from .const import DOMAIN
 from .runtime import ShareRuntime, cleanup_topics
 from .bridge import ShareBridge
+from .received import ReceivedShares
 
 
 async def async_setup_entry(hass, entry):
@@ -23,9 +24,13 @@ async def async_setup_entry(hass, entry):
         except TimeoutError as err:
             await runtime.bridge.async_stop()
             raise ConfigEntryNotReady("Secure MQTT share bridge is not connected") from err
+    runtime.received = ReceivedShares(hass, entry)
     try:
         await runtime.async_start()
+        await runtime.received.async_start()
     except Exception:
+        await runtime.received.async_stop()
+        await runtime.async_stop()
         if runtime.bridge:
             await runtime.bridge.async_stop()
         raise
@@ -35,9 +40,11 @@ async def async_setup_entry(hass, entry):
 
 async def _options_updated(hass, entry):
     await entry.runtime_data.async_apply(entry.options)
+    await entry.runtime_data.received.async_apply(entry.options)
 
 
 async def async_unload_entry(hass, entry):
+    await entry.runtime_data.received.async_stop()
     await entry.runtime_data.async_stop()
     if entry.runtime_data.bridge:
         await entry.runtime_data.bridge.async_stop()
@@ -45,6 +52,7 @@ async def async_unload_entry(hass, entry):
 
 
 async def async_remove_entry(hass, entry):
+    await ReceivedShares(hass, entry).async_remove()
     store = Store(hass, 1, f"{DOMAIN}.{entry.entry_id}")
     data = await store.async_load() or {}
     await cleanup_topics(hass, data.get("topics", {}))

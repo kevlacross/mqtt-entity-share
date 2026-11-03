@@ -58,9 +58,10 @@
       },
       "mode": {
         "title": "Freigabe-Modus wählen",
-        "description": "Liste: feste Auswahl. Labels: automatisch anhand deiner Labels. Hybrid: Labels plus manuelle Auswahl und Ausschlüsse. Empfangene MQTT-Share-Entitäten werden nicht erneut geteilt.",
+        "description": "Liste: feste Auswahl. Labels: automatisch anhand deiner Labels. Hybrid: Labels plus manuelle Auswahl und Ausschlüsse. Empfangene MQTT-Share-Entitäten werden nicht erneut geteilt.\n\nEmpfangene Geräte findest du in der Empfangsübersicht unter den Optionen von MQTT Entity Share; sie bleiben in MQTT. Die optionale Kennzeichnung vergibt keine Rechte. Beim Ausschalten werden nur automatisch hinzugefügte Label-Zuweisungen entfernt.",
         "data": {
-          "mode": "Auswahl der Freigaben"
+          "mode": "Auswahl der Freigaben",
+          "label_received": "Empfangene Entitäten automatisch mit „MQTT-Share received“ markieren"
         }
       },
       "labels": {
@@ -149,9 +150,10 @@
       },
       "mode": {
         "title": "Freigabe-Modus wählen",
-        "description": "Liste: feste Auswahl. Labels: automatisch anhand deiner Labels. Hybrid: Labels plus manuelle Auswahl und Ausschlüsse. Empfangene MQTT-Share-Entitäten werden nicht erneut geteilt.",
+        "description": "Liste: feste Auswahl. Labels: automatisch anhand deiner Labels. Hybrid: Labels plus manuelle Auswahl und Ausschlüsse. Empfangene MQTT-Share-Entitäten werden nicht erneut geteilt.\n\nEmpfangene Geräte findest du in der Empfangsübersicht unter den Optionen von MQTT Entity Share; sie bleiben in MQTT. Die optionale Kennzeichnung vergibt keine Rechte. Beim Ausschalten werden nur automatisch hinzugefügte Label-Zuweisungen entfernt.",
         "data": {
-          "mode": "Auswahl der Freigaben"
+          "mode": "Auswahl der Freigaben",
+          "label_received": "Empfangene Entitäten automatisch mit „MQTT-Share received“ markieren"
         }
       },
       "labels": {
@@ -163,6 +165,17 @@
           "control_label": "Vorhandenes Label: steuerbar",
           "control_label_name": "Neues Label: steuerbar"
         }
+      },
+      "init": {
+        "title": "MQTT Entity Share",
+        "menu_options": {
+          "received": "Empfangene Geräte ansehen",
+          "sharing": "Freigaben und Kennzeichnung bearbeiten"
+        }
+      },
+      "received": {
+        "title": "Empfangene Freigaben",
+        "description": "**{device_count} Geräte · {entity_count} Entitäten**\n\nDie Geräte und Entitäten gehören weiterhin zu MQTT. Die Zahl neben einem Gerät zeigt seine empfangenen Entitäten. Klicke auf einen Gerätenamen, um das Originalgerät zu öffnen.\n\n{devices}\n\n**Entitäten ohne Gerätezuordnung**\n\n{standalone}\n\nDiese Ansicht wird beim Öffnen aktualisiert. — = Keine Einträge."
       }
     },
     "error": {
