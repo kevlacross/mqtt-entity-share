@@ -13,7 +13,7 @@
       },
       "filters": {
         "title": "Nach Raum und Art filtern",
-        "description": "Wähle für diese Runde zum Beispiel Licht, anschließend in einer neuen Runde Schalter oder Rollläden. Räume und Suche grenzen die Treffer weiter ein. Deine gesamte bisherige Auswahl bleibt erhalten.\n\n**Gesammelt: {summary}**",
+        "description": "Wähle für diese Runde zum Beispiel Licht, anschließend in einer neuen Runde Schalter oder Rollläden. Räume und Suche grenzen die Treffer weiter ein. Deine gesamte bisherige Auswahl bleibt erhalten.\n\n**Gesammelt: {summary}**\n\n— = Ohne Raum.",
         "data": {
           "areas": "Räume (Mehrfachauswahl)",
           "types": "Art / Typ (Mehrfachauswahl)",
@@ -29,7 +29,7 @@
       },
       "review": {
         "title": "Freigaben und Rechte prüfen",
-        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nManuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}",
+        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nManuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}\n\n👁️ Nur lesen · 🎛️ Steuerbar · 🏷️ Label · 📋 Manuell\n\n— = Keine wirksamen Freigaben. Labels können nach dem Speichern an Geräte oder Entitäten vergeben werden.",
         "data": {
           "entities": "Manuell freigeben",
           "control_entities": "Davon zusätzlich steuerbar",
@@ -39,7 +39,7 @@
       },
       "confirm": {
         "title": "Freigabe speichern",
-        "description": "**{count} Freigaben: {read} nur lesen · {control} steuerbar**\n\n{entities}\n\nLabel-Zuweisungen werden nach dem Speichern automatisch berücksichtigt. Bei nur lesbaren Freigaben weist die sendende Instanz Steuerbefehle zurück.",
+        "description": "**{count} Freigaben: {read} nur lesen · {control} steuerbar**\n\n{entities}\n\nLabel-Zuweisungen werden nach dem Speichern automatisch berücksichtigt. Bei nur lesbaren Freigaben weist die sendende Instanz Steuerbefehle zurück.\n\n👁️ Nur lesen · 🎛️ Steuerbar · 🏷️ Label · 📋 Manuell\n\n— = Keine wirksamen Freigaben. Labels können nach dem Speichern an Geräte oder Entitäten vergeben werden.",
         "data": {
           "action": "Aktion"
         }
@@ -104,7 +104,7 @@
     "step": {
       "filters": {
         "title": "Nach Raum und Art filtern",
-        "description": "Wähle für diese Runde zum Beispiel Licht, anschließend in einer neuen Runde Schalter oder Rollläden. Räume und Suche grenzen die Treffer weiter ein. Deine gesamte bisherige Auswahl bleibt erhalten.\n\n**Gesammelt: {summary}**",
+        "description": "Wähle für diese Runde zum Beispiel Licht, anschließend in einer neuen Runde Schalter oder Rollläden. Räume und Suche grenzen die Treffer weiter ein. Deine gesamte bisherige Auswahl bleibt erhalten.\n\n**Gesammelt: {summary}**\n\n— = Ohne Raum.",
         "data": {
           "areas": "Räume (Mehrfachauswahl)",
           "types": "Art / Typ (Mehrfachauswahl)",
@@ -120,7 +120,7 @@
       },
       "review": {
         "title": "Freigaben und Rechte prüfen",
-        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nManuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}",
+        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nManuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}\n\n👁️ Nur lesen · 🎛️ Steuerbar · 🏷️ Label · 📋 Manuell\n\n— = Keine wirksamen Freigaben. Labels können nach dem Speichern an Geräte oder Entitäten vergeben werden.",
         "data": {
           "entities": "Manuell freigeben",
           "control_entities": "Davon zusätzlich steuerbar",
@@ -130,7 +130,7 @@
       },
       "confirm": {
         "title": "Freigabe speichern",
-        "description": "**{count} Freigaben: {read} nur lesen · {control} steuerbar**\n\n{entities}\n\nLabel-Zuweisungen werden nach dem Speichern automatisch berücksichtigt. Bei nur lesbaren Freigaben weist die sendende Instanz Steuerbefehle zurück.",
+        "description": "**{count} Freigaben: {read} nur lesen · {control} steuerbar**\n\n{entities}\n\nLabel-Zuweisungen werden nach dem Speichern automatisch berücksichtigt. Bei nur lesbaren Freigaben weist die sendende Instanz Steuerbefehle zurück.\n\n👁️ Nur lesen · 🎛️ Steuerbar · 🏷️ Label · 📋 Manuell\n\n— = Keine wirksamen Freigaben. Labels können nach dem Speichern an Geräte oder Entitäten vergeben werden.",
         "data": {
           "action": "Aktion"
         }
@@ -173,6 +173,64 @@
     },
     "abort": {
       "invalid_selection": "Die Auswahl hat sich geändert. Bitte den Dialog erneut öffnen."
+    }
+  },
+  "selector": {
+    "sharing_mode": {
+      "options": {
+        "list": "Liste – manuell auswählen",
+        "labels": "Labels – automatisch freigeben",
+        "hybrid": "Hybrid – Labels und manuelle Ausnahmen"
+      }
+    },
+    "next_action": {
+      "options": {
+        "confirm": "Zur Bestätigung",
+        "filters": "Weitere Entitäten hinzufügen",
+        "labels": "Labels bearbeiten",
+        "save": "Freigabe speichern",
+        "review": "Auswahl nochmals bearbeiten"
+      }
+    },
+    "entity_type": {
+      "options": {
+        "light": "Licht",
+        "cover": "Rollläden und Abdeckungen",
+        "switch": "Schalter",
+        "sensor": "Sensoren",
+        "binary_sensor": "Binäre Sensoren",
+        "climate": "Heizung und Klima",
+        "fan": "Ventilatoren",
+        "lock": "Schlösser",
+        "button": "Tasten",
+        "scene": "Szenen",
+        "script": "Skripte",
+        "input_boolean": "Schalter-Helfer",
+        "input_number": "Zahlen-Helfer",
+        "input_select": "Auswahl-Helfer",
+        "input_text": "Text-Helfer",
+        "input_button": "Tasten-Helfer",
+        "input_datetime": "Datum-/Zeit-Helfer",
+        "number": "Zahlen",
+        "select": "Auswahllisten",
+        "text": "Text",
+        "vacuum": "Saugroboter",
+        "lawn_mower": "Rasenmäher",
+        "update": "Updates",
+        "device_tracker": "Anwesenheit",
+        "alarm_control_panel": "Alarmanlagen",
+        "event": "Ereignisse",
+        "humidifier": "Luftbefeuchter",
+        "siren": "Sirenen",
+        "water_heater": "Warmwasser",
+        "valve": "Ventile",
+        "image": "Bilder",
+        "date": "Datum",
+        "time": "Uhrzeit",
+        "datetime": "Datum und Uhrzeit",
+        "tag": "Tags",
+        "infrared": "Infrarot"
+      }
     }
   }
 }

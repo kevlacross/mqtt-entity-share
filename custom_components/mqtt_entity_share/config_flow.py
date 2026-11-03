@@ -39,6 +39,7 @@ TYPE_NAMES = {
     "valve": "Ventile", "image": "Bilder", "date": "Datum", "time": "Uhrzeit",
     "datetime": "Datum und Uhrzeit", "tag": "Tags", "infrared": "Infrarot",
 }
+TYPE_SEARCH_NAMES = {'light': 'Lights', 'cover': 'Covers and blinds', 'switch': 'Switches', 'sensor': 'Sensors', 'binary_sensor': 'Binary sensors', 'climate': 'Heating and climate', 'fan': 'Fans', 'lock': 'Locks', 'button': 'Buttons', 'scene': 'Scenes', 'script': 'Scripts', 'input_boolean': 'Toggle helpers', 'input_number': 'Number helpers', 'input_select': 'Dropdown helpers', 'input_text': 'Text helpers', 'input_button': 'Button helpers', 'input_datetime': 'Date/time helpers', 'number': 'Numbers', 'select': 'Select entities', 'text': 'Text', 'vacuum': 'Vacuums', 'lawn_mower': 'Lawn mowers', 'update': 'Updates', 'device_tracker': 'Presence', 'alarm_control_panel': 'Alarm panels', 'event': 'Events', 'humidifier': 'Humidifiers', 'siren': 'Sirens', 'water_heater': 'Water heaters', 'valve': 'Valves', 'image': 'Images', 'date': 'Dates', 'time': 'Times', 'datetime': 'Date and time', 'tag': 'Tags', 'infrared': 'Infrared'}
 PAGE_SIZE = 100
 NO_AREA = "__no_area__"
 
@@ -53,7 +54,7 @@ def entity_details(hass, entity_id):
     name = (state.attributes.get("friendly_name") if state else None) or (entry.name or entry.original_name if entry else None) or entity_id
     kind = entity_id.split(".", 1)[0]
     return {"id": entity_id, "name": name, "area": area_id or NO_AREA,
-            "area_name": area.name if area else "Ohne Raum", "kind": kind,
+            "area_name": area.name if area else "—", "kind": kind,
             "kind_name": TYPE_NAMES.get(kind, kind)}
 
 
@@ -82,9 +83,7 @@ class SelectionSteps:
             return await self.async_step_filters()
         return self.async_show_form(step_id="mode", data_schema=vol.Schema({
             vol.Required("mode", default=self.mode): selector.SelectSelector(selector.SelectSelectorConfig(
-                options=[{"value": "list", "label": "Liste – manuell auswählen"},
-                         {"value": "labels", "label": "Labels – automatisch freigeben"},
-                         {"value": "hybrid", "label": "Hybrid – Labels und manuelle Ausnahmen"}],
+                options=["list", "labels", "hybrid"], translation_key="sharing_mode",
                 mode=selector.SelectSelectorMode.LIST)),
         }))
 
@@ -145,14 +144,15 @@ class SelectionSteps:
         lines = []
         for entity_id in sorted(permissions.rights):
             detail = entity_details(self.hass, entity_id)
-            right = "steuerbar" if permissions.rights[entity_id] == "control" else "nur lesen"
-            lines.append(f'- {detail["name"]} (`{entity_id}`) – **{right}**, {permissions.reasons[entity_id]}')
-        return "\n".join(lines) or "Noch keine wirksamen Freigaben. Neue Labels können nach dem Speichern an Geräte oder Entitäten vergeben werden."
+            right = "🎛️" if permissions.rights[entity_id] == "control" else "👁️"
+            origin = "📋" if permissions.reasons[entity_id] == "Manuelle Auswahl" else "🏷️"
+            lines.append(f'- {detail["name"]} (`{entity_id}`) – **{right}**, {origin}')
+        return "\n".join(lines) or "—"
 
     def _summary(self):
         counts = Counter(e.split(".", 1)[0] for e in self.selected or [])
-        names = {"light": "Lampen", "switch": "Schalter", "cover": "Rollläden"}
-        return " · ".join(f"{n} {names.get(k, TYPE_NAMES.get(k, k))}" for k, n in sorted(counts.items())) or "Noch keine Entitäten ausgewählt"
+        names = {"light": "💡", "switch": "🔘", "cover": "🪟", "sensor": "📈", "binary_sensor": "⚪"}
+        return " · ".join(f"{n} {names.get(k, k)}" for k, n in sorted(counts.items())) or "0"
 
     def _details(self):
         return [entity_details(self.hass, e) for e in eligible_entities(self.hass)]
@@ -171,16 +171,16 @@ class SelectionSteps:
         # Keep filters valid even when an entity temporarily disappears.
         for area_id in filters.get("areas", []):
             area = ar.async_get(self.hass).async_get_area(area_id)
-            areas.setdefault(area_id, area.name if area else "Ohne Raum" if area_id == NO_AREA else area_id)
+            areas.setdefault(area_id, area.name if area else "—" if area_id == NO_AREA else area_id)
         for kind in filters.get("types", []):
             types.setdefault(kind, TYPE_NAMES.get(kind, kind))
-        def multi(options):
+        def multi(options, translation_key=None):
             return selector.SelectSelector(selector.SelectSelectorConfig(
-                options=[{"value": k, "label": v} for k, v in sorted(options.items(), key=lambda i: i[1].casefold())],
-                multiple=True, mode=selector.SelectSelectorMode.DROPDOWN))
+                options=(sorted(options) if translation_key else [{"value": k, "label": v} for k, v in sorted(options.items(), key=lambda i: i[1].casefold())]),
+                **({"translation_key": translation_key} if translation_key else {}), multiple=True, mode=selector.SelectSelectorMode.DROPDOWN))
         return self.async_show_form(step_id="filters", data_schema=vol.Schema({
             vol.Optional("areas", default=filters.get("areas", [])): multi(areas),
-            vol.Optional("types", default=filters.get("types", [])): multi(types),
+            vol.Optional("types", default=filters.get("types", [])): multi(types, "entity_type"),
             vol.Optional("search", default=filters.get("search", "")): str,
         }), description_placeholders={"selected": str(len(self.selected or [])), "summary": self._summary()})
 
@@ -188,7 +188,7 @@ class SelectionSteps:
         filters = self.filters or {}
         words = filters.get("search", "").casefold().split()
         def match(e):
-            text = " ".join((e["id"], e["name"], e["area_name"], e["kind_name"])).casefold()
+            text = " ".join((e["id"], e["name"], e["area_name"], e["kind_name"], TYPE_SEARCH_NAMES.get(e["kind"], e["kind"]))).casefold()
             return ((not filters.get("areas") or e["area"] in filters["areas"])
                     and (not filters.get("types") or e["kind"] in filters["types"])
                     and all(word in text for word in words))
@@ -224,7 +224,7 @@ class SelectionSteps:
         self.page = max(0, min(self.page, pages - 1))
         visible = matches[self.page * PAGE_SIZE:(self.page + 1) * PAGE_SIZE]
         self.visible_ids = [e["id"] for e in visible]
-        options = [{"value": e["id"], "label": f'{e["name"]} · {e["area_name"]} · {e["kind_name"]} ({e["id"]})'} for e in visible]
+        options = [{"value": e["id"], "label": f'{e["name"]} · {e["area_name"]} ({e["id"]})'} for e in visible]
         fields = {}
         if options:
             fields[vol.Optional("entities", default=[e for e in self.selected or [] if e in self.visible_ids])] = selector.SelectSelector(
@@ -300,13 +300,13 @@ class SelectionSteps:
             candidates = sorted(set(eligible_entities(self.hass)) | set(self.exclude_entities or []))
             fields[vol.Optional("exclude_entities", default=self.exclude_entities or [])] = selector.EntitySelector(
                 selector.EntitySelectorConfig(multiple=True, include_entities=candidates))
-        actions = [{"value": "confirm", "label": "Zur Bestätigung"}]
+        actions = ["confirm"]
         if self.mode != "labels":
-            actions.append({"value": "filters", "label": "Weitere Entitäten hinzufügen"})
+            actions.append("filters")
         if self.mode in ("labels", "hybrid"):
-            actions.append({"value": "labels", "label": "Labels bearbeiten"})
+            actions.append("labels")
         fields[vol.Required("action", default="confirm")] = selector.SelectSelector(
-            selector.SelectSelectorConfig(options=actions, mode=selector.SelectSelectorMode.DROPDOWN))
+            selector.SelectSelectorConfig(options=actions, translation_key="next_action", mode=selector.SelectSelectorMode.DROPDOWN))
         effective = self._effective()
         return self.async_show_form(step_id="review", data_schema=vol.Schema(fields),
             description_placeholders={"selected": str(len(effective.readable)), "summary": self._summary(),
@@ -325,7 +325,7 @@ class SelectionSteps:
         permissions = self._effective()
         return self.async_show_form(step_id="confirm", data_schema=vol.Schema({
             vol.Required("action", default="save"): selector.SelectSelector(selector.SelectSelectorConfig(
-                options=[{"value": "save", "label": "Freigabe speichern"}, {"value": "review", "label": "Auswahl nochmals bearbeiten"}],
+                options=["save", "review"], translation_key="next_action",
                 mode=selector.SelectSelectorMode.DROPDOWN)),
         }), description_placeholders={
             "count": str(len(permissions.readable)), "read": str(len(permissions.readable - permissions.controllable)),

@@ -3,176 +3,234 @@
   "config": {
     "step": {
       "user": {
-        "title": "MQTT-Freigabe einrichten",
-        "description": "Die Freigabe verwendet die vorhandene MQTT-Verbindung. Auf dem Empfänger muss der MQTT-Discovery-Präfix zum hier gewählten Präfix passen. Ein eigener Präfix verhindert, dass der Sender seine Freigaben selbst importiert.",
+        "title": "Set up MQTT sharing",
+        "description": "Sharing uses your existing MQTT connection. The receiver must receive discovery messages under the matching prefix. A dedicated sharing prefix prevents the sender from importing its own exports.",
         "data": {
-          "base_topic": "Themenpfad für Zustände und Befehle",
-          "discovery_topic": "Discovery-Präfix für den Empfänger",
-          "use_remote_bridge": "Entfernten Freigabe-Broker über sichere WebSockets anbinden"
+          "base_topic": "Topic root for states and commands",
+          "discovery_topic": "Sharing discovery prefix",
+          "use_remote_bridge": "Connect a remote sharing broker over secure WebSockets"
         }
       },
       "filters": {
-        "title": "Nach Raum und Art filtern",
-        "description": "Wähle für diese Runde zum Beispiel Licht, anschließend in einer neuen Runde Schalter oder Rollläden. Räume und Suche grenzen die Treffer weiter ein. Deine gesamte bisherige Auswahl bleibt erhalten.\n\n**Gesammelt: {summary}**",
+        "title": "Filter by area and type",
+        "description": "For this round, choose lights, for example. Add switches or covers in another round. Areas and search narrow the results further. Your previous selections are kept.\n\n**Collected: {summary}**\n\n— = No area.",
         "data": {
-          "areas": "Räume (Mehrfachauswahl)",
-          "types": "Art / Typ (Mehrfachauswahl)",
-          "search": "Suche nach Name oder Entitäts-ID"
+          "areas": "Areas (multiple selection)",
+          "types": "Entity types (multiple selection)",
+          "search": "Search by name or entity ID"
         }
       },
       "entities": {
-        "title": "Entitäten per Häkchen auswählen",
-        "description": "**{count} Treffer · Seite {page} von {pages}**\n\n**Gesammelt: {summary}**\n\nWähle mehrere Entitäten per Häkchen und klicke auf OK. Danach kannst du direkt weitere Typen hinzufügen oder die Gesamtauswahl prüfen. Noch wird nichts freigegeben.",
+        "title": "Select entities",
+        "description": "**{count} matches · Page {page} of {pages}**\n\n**Collected: {summary}**\n\nSelect multiple entities and press OK. You can then add more types or review your full selection. Nothing is shared until you save.",
         "data": {
-          "entities": "Entitäten dieser Seite"
+          "entities": "Entities on this page"
         }
       },
       "review": {
-        "title": "Freigaben und Rechte prüfen",
-        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nManuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}",
+        "title": "Review sharing and permissions",
+        "description": "**{selected} shared entities: {read} read-only · {control} controllable**\n\nManual selection grants sharing. The second field additionally allows control. In hybrid mode, exclusions override manual selection, which overrides labels. Label-based sharing updates automatically.\n\n{preview}\n\n👁️ Read-only · 🎛️ Control · 🏷️ Label · 📋 Manual\n\n— = No effective shares. Assign labels to devices or entities after saving.",
         "data": {
-          "entities": "Manuell freigeben",
-          "control_entities": "Davon zusätzlich steuerbar",
-          "exclude_entities": "Nie freigeben (auch bei Label)",
-          "action": "Weiter mit …"
+          "entities": "Share manually",
+          "control_entities": "Additionally allow control for these",
+          "exclude_entities": "Never share (even with a label)",
+          "action": "Continue with…"
         }
       },
       "confirm": {
-        "title": "Freigabe speichern",
-        "description": "**{count} Freigaben: {read} nur lesen · {control} steuerbar**\n\n{entities}\n\nLabel-Zuweisungen werden nach dem Speichern automatisch berücksichtigt. Bei nur lesbaren Freigaben weist die sendende Instanz Steuerbefehle zurück.",
+        "title": "Save sharing",
+        "description": "**{count} shared entities: {read} read-only · {control} controllable**\n\n{entities}\n\nLabel assignments are applied automatically after saving. The sending instance rejects commands for read-only shares.\n\n👁️ Read-only · 🎛️ Control · 🏷️ Label · 📋 Manual\n\n— = No effective shares. Assign labels to devices or entities after saving.",
         "data": {
-          "action": "Aktion"
+          "action": "Action"
         }
       },
       "round": {
-        "title": "Auswahl übernommen – wie weiter?",
-        "description": "**Gesammelt: {summary}**\n\n**{selected} Entitäten insgesamt.** Du kannst jetzt zum Beispiel nach den Lampen die Schalter ergänzen. Die bisherige Auswahl bleibt erhalten.\n\nAlle auswählen / abwählen bezieht sich nur auf die {matches} Treffer des letzten Filters.",
+        "title": "Selection collected — what next?",
+        "description": "**Collected: {summary}**\n\n**{selected} entities in total.** You can now add switches after selecting lights, for example. Your previous selections are kept.\n\nSelect all / clear applies only to the {matches} results of the last filter.",
         "menu_options": {
-          "more": "Übernehmen & weitere auswählen",
-          "review": "Gesamtauswahl prüfen",
-          "select_all": "Alle Treffer dieser Runde auswählen",
-          "clear_matches": "Treffer dieser Runde abwählen",
-          "next_page": "Weitere Treffer dieser Runde anzeigen",
-          "previous_page": "Vorherige Trefferseite"
+          "more": "Keep selection & add more",
+          "review": "Review all selected entities",
+          "select_all": "Select all matches in this round",
+          "clear_matches": "Clear matches in this round",
+          "next_page": "Show more matches in this round",
+          "previous_page": "Previous results page"
         }
       },
       "mode": {
-        "title": "Freigabe-Modus wählen",
-        "description": "Liste: feste Auswahl. Labels: automatisch anhand deiner Labels. Hybrid: Labels plus manuelle Auswahl und Ausschlüsse. Empfangene MQTT-Share-Entitäten werden nicht erneut geteilt.",
+        "title": "Choose a sharing mode",
+        "description": "List: a fixed selection. Labels: automatic selection based on labels. Hybrid: labels plus manual permissions and exclusions. Received MQTT Share entities are never exported again.",
         "data": {
-          "mode": "Auswahl der Freigaben"
+          "mode": "How to select shares"
         }
       },
       "labels": {
-        "title": "Labels für diese Instanz",
-        "description": "Wähle vorhandene Labels oder gib Namen für neue Labels ein. Bei vorhandener Auswahl wird das Namensfeld ignoriert. Neue Labels werden erst beim abschließenden Speichern angelegt. Labels an Geräten gelten für deren unterstützte Entitäten. Bei beiden Labels gilt Steuerung.",
+        "title": "Labels for this instance",
+        "description": "Choose existing labels or enter names for new labels. If an existing label is selected, the name field is ignored. New labels are created only on final save. Device labels apply to supported entities on that device. The control label wins when both labels apply.",
         "data": {
-          "read_label": "Vorhandenes Label: nur lesen",
-          "read_label_name": "Neues Label: nur lesen",
-          "control_label": "Vorhandenes Label: steuerbar",
-          "control_label_name": "Neues Label: steuerbar"
+          "read_label": "Existing label: read-only",
+          "read_label_name": "New label: read-only",
+          "control_label": "Existing label: controllable",
+          "control_label_name": "New label: controllable"
         }
       },
       "bridge": {
-        "title": "Verbindung zum Freigabe-Broker",
-        "description": "Die vorhandene MQTT-Verbindung bleibt erhalten. Nur Freigaben dieser Instanz und der angegebenen Gegenstelle werden weitergeleitet. TLS-Zertifikate werden geprüft. WebSocket-Pfad: /mqtt. Der lokale Discovery-Präfix muss zur bestehenden MQTT-Integration passen.",
+        "title": "Connect to the sharing broker",
+        "description": "Your existing MQTT connection is kept. Only shares from this instance and the specified peer are relayed. TLS certificates are verified. WebSocket path: /mqtt. The local discovery prefix must match your existing MQTT integration.",
         "data": {
-          "host": "Broker-Hostname",
-          "port": "TLS-Port",
-          "username": "Benutzername",
-          "password": "Passwort",
-          "peer_base_topic": "Themenpfad der Gegenstelle",
-          "peer_source_id": "Quell-ID der Gegenstelle",
-          "local_discovery_prefix": "Discovery-Präfix des eigenen MQTT-Brokers"
+          "host": "Broker hostname",
+          "port": "TLS port",
+          "username": "Username",
+          "password": "Password",
+          "peer_base_topic": "Peer topic root",
+          "peer_source_id": "Peer source ID",
+          "local_discovery_prefix": "Local MQTT discovery prefix"
         }
       }
     },
     "error": {
-      "invalid_topic": "Bitte einen eigenen Discovery-Präfix ohne Schrägstriche und einen gültigen Themenpfad verwenden (kein homeassistant).",
-      "invalid_entities": "Die Auswahl enthält nicht verfügbare oder nicht unterstützte Entitäten.",
-      "missing_label": "Das Label existiert nicht mehr. Bitte erneut wählen.",
-      "label_required": "Bitte ein bestehendes Label wählen oder einen Namen eingeben.",
-      "same_label": "Für Lesen und Steuern bitte unterschiedliche Labels verwenden.",
-      "invalid_peer": "Gültigen, unterschiedlichen Themenpfad und Quell-ID der Gegenstelle angeben."
+      "invalid_topic": "Use a dedicated discovery prefix without slashes and a valid topic root (not homeassistant).",
+      "invalid_entities": "The selection contains unavailable or unsupported entities.",
+      "missing_label": "This label no longer exists. Please select it again.",
+      "label_required": "Select an existing label or enter a name.",
+      "same_label": "Use different labels for reading and control.",
+      "invalid_peer": "Enter a valid, distinct peer topic root and a valid peer source ID."
     },
     "abort": {
-      "single_instance_allowed": "Die Freigabe ist bereits eingerichtet. Bitte die Optionen der vorhandenen Integration öffnen.",
-      "invalid_selection": "Die Auswahl hat sich geändert. Bitte den Dialog erneut öffnen."
+      "single_instance_allowed": "Sharing is already configured. Open the options of the existing integration.",
+      "invalid_selection": "The selection has changed. Please reopen the dialog."
     }
   },
   "options": {
     "step": {
       "filters": {
-        "title": "Nach Raum und Art filtern",
-        "description": "Wähle für diese Runde zum Beispiel Licht, anschließend in einer neuen Runde Schalter oder Rollläden. Räume und Suche grenzen die Treffer weiter ein. Deine gesamte bisherige Auswahl bleibt erhalten.\n\n**Gesammelt: {summary}**",
+        "title": "Filter by area and type",
+        "description": "For this round, choose lights, for example. Add switches or covers in another round. Areas and search narrow the results further. Your previous selections are kept.\n\n**Collected: {summary}**\n\n— = No area.",
         "data": {
-          "areas": "Räume (Mehrfachauswahl)",
-          "types": "Art / Typ (Mehrfachauswahl)",
-          "search": "Suche nach Name oder Entitäts-ID"
+          "areas": "Areas (multiple selection)",
+          "types": "Entity types (multiple selection)",
+          "search": "Search by name or entity ID"
         }
       },
       "entities": {
-        "title": "Entitäten per Häkchen auswählen",
-        "description": "**{count} Treffer · Seite {page} von {pages}**\n\n**Gesammelt: {summary}**\n\nWähle mehrere Entitäten per Häkchen und klicke auf OK. Danach kannst du direkt weitere Typen hinzufügen oder die Gesamtauswahl prüfen. Noch wird nichts freigegeben.",
+        "title": "Select entities",
+        "description": "**{count} matches · Page {page} of {pages}**\n\n**Collected: {summary}**\n\nSelect multiple entities and press OK. You can then add more types or review your full selection. Nothing is shared until you save.",
         "data": {
-          "entities": "Entitäten dieser Seite"
+          "entities": "Entities on this page"
         }
       },
       "review": {
-        "title": "Freigaben und Rechte prüfen",
-        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nManuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}",
+        "title": "Review sharing and permissions",
+        "description": "**{selected} shared entities: {read} read-only · {control} controllable**\n\nManual selection grants sharing. The second field additionally allows control. In hybrid mode, exclusions override manual selection, which overrides labels. Label-based sharing updates automatically.\n\n{preview}\n\n👁️ Read-only · 🎛️ Control · 🏷️ Label · 📋 Manual\n\n— = No effective shares. Assign labels to devices or entities after saving.",
         "data": {
-          "entities": "Manuell freigeben",
-          "control_entities": "Davon zusätzlich steuerbar",
-          "exclude_entities": "Nie freigeben (auch bei Label)",
-          "action": "Weiter mit …"
+          "entities": "Share manually",
+          "control_entities": "Additionally allow control for these",
+          "exclude_entities": "Never share (even with a label)",
+          "action": "Continue with…"
         }
       },
       "confirm": {
-        "title": "Freigabe speichern",
-        "description": "**{count} Freigaben: {read} nur lesen · {control} steuerbar**\n\n{entities}\n\nLabel-Zuweisungen werden nach dem Speichern automatisch berücksichtigt. Bei nur lesbaren Freigaben weist die sendende Instanz Steuerbefehle zurück.",
+        "title": "Save sharing",
+        "description": "**{count} shared entities: {read} read-only · {control} controllable**\n\n{entities}\n\nLabel assignments are applied automatically after saving. The sending instance rejects commands for read-only shares.\n\n👁️ Read-only · 🎛️ Control · 🏷️ Label · 📋 Manual\n\n— = No effective shares. Assign labels to devices or entities after saving.",
         "data": {
-          "action": "Aktion"
+          "action": "Action"
         }
       },
       "round": {
-        "title": "Auswahl übernommen – wie weiter?",
-        "description": "**Gesammelt: {summary}**\n\n**{selected} Entitäten insgesamt.** Du kannst jetzt zum Beispiel nach den Lampen die Schalter ergänzen. Die bisherige Auswahl bleibt erhalten.\n\nAlle auswählen / abwählen bezieht sich nur auf die {matches} Treffer des letzten Filters.",
+        "title": "Selection collected — what next?",
+        "description": "**Collected: {summary}**\n\n**{selected} entities in total.** You can now add switches after selecting lights, for example. Your previous selections are kept.\n\nSelect all / clear applies only to the {matches} results of the last filter.",
         "menu_options": {
-          "more": "Übernehmen & weitere auswählen",
-          "review": "Gesamtauswahl prüfen",
-          "select_all": "Alle Treffer dieser Runde auswählen",
-          "clear_matches": "Treffer dieser Runde abwählen",
-          "next_page": "Weitere Treffer dieser Runde anzeigen",
-          "previous_page": "Vorherige Trefferseite"
+          "more": "Keep selection & add more",
+          "review": "Review all selected entities",
+          "select_all": "Select all matches in this round",
+          "clear_matches": "Clear matches in this round",
+          "next_page": "Show more matches in this round",
+          "previous_page": "Previous results page"
         }
       },
       "mode": {
-        "title": "Freigabe-Modus wählen",
-        "description": "Liste: feste Auswahl. Labels: automatisch anhand deiner Labels. Hybrid: Labels plus manuelle Auswahl und Ausschlüsse. Empfangene MQTT-Share-Entitäten werden nicht erneut geteilt.",
+        "title": "Choose a sharing mode",
+        "description": "List: a fixed selection. Labels: automatic selection based on labels. Hybrid: labels plus manual permissions and exclusions. Received MQTT Share entities are never exported again.",
         "data": {
-          "mode": "Auswahl der Freigaben"
+          "mode": "How to select shares"
         }
       },
       "labels": {
-        "title": "Labels für diese Instanz",
-        "description": "Wähle vorhandene Labels oder gib Namen für neue Labels ein. Bei vorhandener Auswahl wird das Namensfeld ignoriert. Neue Labels werden erst beim abschließenden Speichern angelegt. Labels an Geräten gelten für deren unterstützte Entitäten. Bei beiden Labels gilt Steuerung.",
+        "title": "Labels for this instance",
+        "description": "Choose existing labels or enter names for new labels. If an existing label is selected, the name field is ignored. New labels are created only on final save. Device labels apply to supported entities on that device. The control label wins when both labels apply.",
         "data": {
-          "read_label": "Vorhandenes Label: nur lesen",
-          "read_label_name": "Neues Label: nur lesen",
-          "control_label": "Vorhandenes Label: steuerbar",
-          "control_label_name": "Neues Label: steuerbar"
+          "read_label": "Existing label: read-only",
+          "read_label_name": "New label: read-only",
+          "control_label": "Existing label: controllable",
+          "control_label_name": "New label: controllable"
         }
       }
     },
     "error": {
-      "invalid_entities": "Die Auswahl enthält nicht verfügbare oder nicht unterstützte Entitäten.",
-      "missing_label": "Das Label existiert nicht mehr. Bitte erneut wählen.",
-      "label_required": "Bitte ein bestehendes Label wählen oder einen Namen eingeben.",
-      "same_label": "Für Lesen und Steuern bitte unterschiedliche Labels verwenden."
+      "invalid_entities": "The selection contains unavailable or unsupported entities.",
+      "missing_label": "This label no longer exists. Please select it again.",
+      "label_required": "Select an existing label or enter a name.",
+      "same_label": "Use different labels for reading and control."
     },
     "abort": {
-      "invalid_selection": "Die Auswahl hat sich geändert. Bitte den Dialog erneut öffnen."
+      "invalid_selection": "The selection has changed. Please reopen the dialog."
+    }
+  },
+  "selector": {
+    "sharing_mode": {
+      "options": {
+        "list": "List — select manually",
+        "labels": "Labels — share automatically",
+        "hybrid": "Hybrid — labels and manual exceptions"
+      }
+    },
+    "next_action": {
+      "options": {
+        "confirm": "Continue to confirmation",
+        "filters": "Add more entities",
+        "labels": "Edit labels",
+        "save": "Save sharing",
+        "review": "Edit selection again"
+      }
+    },
+    "entity_type": {
+      "options": {
+        "light": "Lights",
+        "cover": "Covers and blinds",
+        "switch": "Switches",
+        "sensor": "Sensors",
+        "binary_sensor": "Binary sensors",
+        "climate": "Heating and climate",
+        "fan": "Fans",
+        "lock": "Locks",
+        "button": "Buttons",
+        "scene": "Scenes",
+        "script": "Scripts",
+        "input_boolean": "Toggle helpers",
+        "input_number": "Number helpers",
+        "input_select": "Dropdown helpers",
+        "input_text": "Text helpers",
+        "input_button": "Button helpers",
+        "input_datetime": "Date/time helpers",
+        "number": "Numbers",
+        "select": "Select entities",
+        "text": "Text",
+        "vacuum": "Vacuums",
+        "lawn_mower": "Lawn mowers",
+        "update": "Updates",
+        "device_tracker": "Presence",
+        "alarm_control_panel": "Alarm panels",
+        "event": "Events",
+        "humidifier": "Humidifiers",
+        "siren": "Sirens",
+        "water_heater": "Water heaters",
+        "valve": "Valves",
+        "image": "Images",
+        "date": "Dates",
+        "time": "Times",
+        "datetime": "Date and time",
+        "tag": "Tags",
+        "infrared": "Infrared"
+      }
     }
   }
 }
