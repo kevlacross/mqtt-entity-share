@@ -1,6 +1,6 @@
 <div align="center">
 
-![MQTT Entity Share — Your home. Your choice.](assets/banner.svg)
+![MQTT Entity Share — Your home. Your choice.](assets/banner.en.svg)
 
 **Connect two Home Assistant instances. Share selectively. Stay in control.**
 
@@ -40,7 +40,7 @@ Let another household see a sensor or operate a shared light. Sharing can work i
 
 ## 🏷️ You decide what gets shared
 
-![Read-only, control and no-permission labels compared](assets/labels.svg)
+![Read-only, control and no-permission labels compared](assets/labels.en.svg)
 
 These names are suggestions. Select existing labels or enter your own names during setup. New labels are created only when you confirm the final save.
 
