@@ -29,7 +29,7 @@
       },
       "review": {
         "title": "Review sharing and permissions",
-        "description": "**{selected} shared entities: {read} read-only · {control} controllable**\n\nManual selection grants sharing. The second field additionally allows control. In hybrid mode, exclusions override manual selection, which overrides labels. Label-based sharing updates automatically.\n\n{preview}\n\n👁️ Read-only · 🎛️ Control · 🏷️ Label · 📋 Manual\n\n— = No effective shares. Assign labels to devices or entities after saving.",
+        "description": "**{selected} shared entities: {read} read-only · {control} controllable**\n\nThe overview shows effective shares only. Select additional entities explicitly through “Add more entities”. Manual selection grants sharing. The second field additionally allows control. In hybrid mode, exclusions override manual selection, which overrides labels. Label-based sharing updates automatically.\n\n{preview}\n\n👁️ Read-only · 🎛️ Control · 🏷️ Label · 📋 Manual\n\n— = No effective shares. Assign labels to devices or entities after saving.",
         "data": {
           "entities": "Share manually",
           "control_entities": "Additionally allow control for these",
@@ -61,7 +61,7 @@
         "description": "List: a fixed selection. Labels: automatic selection based on labels. Hybrid: labels plus manual permissions and exclusions. Received MQTT Share entities are never exported again.\n\nFind received devices in the received-shares overview in MQTT Entity Share options; they remain in MQTT. The optional label grants no permissions. Turning it off removes only label assignments added automatically by this integration.",
         "data": {
           "mode": "How to select shares",
-          "label_received": "Automatically label received entities with “MQTT-Share received”"
+          "label_received": "Automatically label received devices and entities with “MQTT-Share received”"
         }
       },
       "labels": {
@@ -121,7 +121,7 @@
       },
       "review": {
         "title": "Review sharing and permissions",
-        "description": "**{selected} shared entities: {read} read-only · {control} controllable**\n\nManual selection grants sharing. The second field additionally allows control. In hybrid mode, exclusions override manual selection, which overrides labels. Label-based sharing updates automatically.\n\n{preview}\n\n👁️ Read-only · 🎛️ Control · 🏷️ Label · 📋 Manual\n\n— = No effective shares. Assign labels to devices or entities after saving.",
+        "description": "**{selected} shared entities: {read} read-only · {control} controllable**\n\nThe overview shows effective shares only. Select additional entities explicitly through “Add more entities”. Manual selection grants sharing. The second field additionally allows control. In hybrid mode, exclusions override manual selection, which overrides labels. Label-based sharing updates automatically.\n\n{preview}\n\n👁️ Read-only · 🎛️ Control · 🏷️ Label · 📋 Manual\n\n— = No effective shares. Assign labels to devices or entities after saving.",
         "data": {
           "entities": "Share manually",
           "control_entities": "Additionally allow control for these",
@@ -153,7 +153,7 @@
         "description": "List: a fixed selection. Labels: automatic selection based on labels. Hybrid: labels plus manual permissions and exclusions. Received MQTT Share entities are never exported again.\n\nFind received devices in the received-shares overview in MQTT Entity Share options; they remain in MQTT. The optional label grants no permissions. Turning it off removes only label assignments added automatically by this integration.",
         "data": {
           "mode": "How to select shares",
-          "label_received": "Automatically label received entities with “MQTT-Share received”"
+          "label_received": "Automatically label received devices and entities with “MQTT-Share received”"
         }
       },
       "labels": {

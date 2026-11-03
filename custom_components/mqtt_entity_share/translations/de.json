@@ -29,7 +29,7 @@
       },
       "review": {
         "title": "Freigaben und Rechte prüfen",
-        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nManuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}\n\n👁️ Nur lesen · 🎛️ Steuerbar · 🏷️ Label · 📋 Manuell\n\n— = Keine wirksamen Freigaben. Labels können nach dem Speichern an Geräte oder Entitäten vergeben werden.",
+        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nDie Übersicht zeigt nur wirksame Freigaben. Weitere Entitäten werden erst über „Weitere Entitäten hinzufügen“ ausgewählt. Manuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}\n\n👁️ Nur lesen · 🎛️ Steuerbar · 🏷️ Label · 📋 Manuell\n\n— = Keine wirksamen Freigaben. Labels können nach dem Speichern an Geräte oder Entitäten vergeben werden.",
         "data": {
           "entities": "Manuell freigeben",
           "control_entities": "Davon zusätzlich steuerbar",
@@ -61,7 +61,7 @@
         "description": "Liste: feste Auswahl. Labels: automatisch anhand deiner Labels. Hybrid: Labels plus manuelle Auswahl und Ausschlüsse. Empfangene MQTT-Share-Entitäten werden nicht erneut geteilt.\n\nEmpfangene Geräte findest du in der Empfangsübersicht unter den Optionen von MQTT Entity Share; sie bleiben in MQTT. Die optionale Kennzeichnung vergibt keine Rechte. Beim Ausschalten werden nur automatisch hinzugefügte Label-Zuweisungen entfernt.",
         "data": {
           "mode": "Auswahl der Freigaben",
-          "label_received": "Empfangene Entitäten automatisch mit „MQTT-Share received“ markieren"
+          "label_received": "Empfangene Geräte und Entitäten automatisch mit „MQTT-Share received“ markieren"
         }
       },
       "labels": {
@@ -121,7 +121,7 @@
       },
       "review": {
         "title": "Freigaben und Rechte prüfen",
-        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nManuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}\n\n👁️ Nur lesen · 🎛️ Steuerbar · 🏷️ Label · 📋 Manuell\n\n— = Keine wirksamen Freigaben. Labels können nach dem Speichern an Geräte oder Entitäten vergeben werden.",
+        "description": "**{selected} Freigaben: {read} nur lesen · {control} steuerbar**\n\nDie Übersicht zeigt nur wirksame Freigaben. Weitere Entitäten werden erst über „Weitere Entitäten hinzufügen“ ausgewählt. Manuelle Auswahl legt die Freigabe fest. Das zweite Feld erlaubt zusätzlich Steuerung. Im Hybrid-Modus gilt: Ausschluss vor manueller Auswahl vor Labels. Label-Freigaben aktualisieren sich automatisch.\n\n{preview}\n\n👁️ Nur lesen · 🎛️ Steuerbar · 🏷️ Label · 📋 Manuell\n\n— = Keine wirksamen Freigaben. Labels können nach dem Speichern an Geräte oder Entitäten vergeben werden.",
         "data": {
           "entities": "Manuell freigeben",
           "control_entities": "Davon zusätzlich steuerbar",
@@ -153,7 +153,7 @@
         "description": "Liste: feste Auswahl. Labels: automatisch anhand deiner Labels. Hybrid: Labels plus manuelle Auswahl und Ausschlüsse. Empfangene MQTT-Share-Entitäten werden nicht erneut geteilt.\n\nEmpfangene Geräte findest du in der Empfangsübersicht unter den Optionen von MQTT Entity Share; sie bleiben in MQTT. Die optionale Kennzeichnung vergibt keine Rechte. Beim Ausschalten werden nur automatisch hinzugefügte Label-Zuweisungen entfernt.",
         "data": {
           "mode": "Auswahl der Freigaben",
-          "label_received": "Empfangene Entitäten automatisch mit „MQTT-Share received“ markieren"
+          "label_received": "Empfangene Geräte und Entitäten automatisch mit „MQTT-Share received“ markieren"
         }
       },
       "labels": {

@@ -5,7 +5,7 @@
 **Zwei Home-Assistant-Instanzen verbinden. Gezielt teilen. Selbst entscheiden.**
 
 [![HACS Custom Repository](https://img.shields.io/badge/HACS-Custom_Repository-41BDF5?style=flat-square)](#installation)
-[![Version 0.6.0](https://img.shields.io/badge/Version-0.6.0-3b82f6?style=flat-square)](#projektstatus)
+[![Version 0.6.1](https://img.shields.io/badge/Version-0.6.1-3b82f6?style=flat-square)](#projektstatus)
 [![Home Assistant 2026.10+](https://img.shields.io/badge/Home_Assistant-2026.10%2B-18bcf2?style=flat-square)](#voraussetzungen)
 [![MIT License](https://img.shields.io/badge/Lizenz-MIT-22a987?style=flat-square)](../LICENSE)
 
@@ -91,7 +91,7 @@ Unsere Integration verwaltet Freigaben und Verbindung; die normale MQTT-Integrat
 
 Unter **MQTT Entity Share → Konfigurieren → Empfangene Geräte ansehen** findest du eine gruppierte Übersicht mit direkten Links zu den Originalgeräten. Sie bleiben der normalen MQTT-Integration zugeordnet. Namen, IDs und die MQTT-Zuständigkeit bleiben erhalten.
 
-Zum Filtern empfangener Entitäten kannst du in den Freigabe-Optionen **„Empfangene Entitäten automatisch mit MQTT-Share received markieren“** einschalten. Die Funktion ist optional und **standardmäßig aus**. Sie markiert auch bereits vorhandene empfangene Entitäten und vergibt keine Freigabe- oder Steuerrechte. Empfangene Freigaben werden weiterhin nicht erneut exportiert.
+Zum Filtern empfangener Geräte und Entitäten kannst du in den Freigabe-Optionen **„Empfangene Geräte und Entitäten automatisch mit MQTT-Share received markieren“** einschalten. Die Funktion ist optional und **standardmäßig aus**. Sie markiert auch bereits vorhandene empfangene Geräte und Entitäten und vergibt keine Freigabe- oder Steuerrechte. Empfangene Freigaben werden weiterhin nicht erneut exportiert.
 
 Beim Ausschalten werden nur Label-Zuweisungen entfernt, die diese Integration selbst hinzugefügt hat. Bereits selbst vergebene Labels bleiben erhalten. Entitäten ohne Gerät können ebenfalls markiert werden, werden in der Übersicht separat aufgeführt.
 
@@ -175,11 +175,11 @@ Nein. Du wählst die Labels pro Instanz. Gleiche Namen sind praktisch, aber kein
 
 ## 🧪 Projektstatus
 
-**Frühe Testversion · aktuell 0.6.0**
+**Frühe Testversion · aktuell 0.6.1**
 
 Die Auswahl- und Rechteprüfung sowie der Transport in beide Richtungen wurden getestet. Noch nicht jede unterstützte Geräteart und jeder Befehl ist Ende zu Ende geprüft. Pro Instanz wird ein Integrationseintrag unterstützt. Die Einrichtung ist auf Deutsch und Englisch verfügbar; andere Sprachen verwenden den englischen Fallback.
 
-**Neu in 0.6.0:** Empfangene Geräte sind in den Optionen von MQTT Entity Share aufgelistet. Empfangene Entitäten können optional automatisch markiert werden. Die deutsche und englische Oberfläche und die Korrektur für schnelle Label-Änderungen bleiben enthalten.
+**Neu in 0.6.1:** Das optionale Empfangs-Label markiert Geräte und Entitäten. Die Label-Auswahl zeigt vorhandene Namen zuverlässig an. Der Hybrid-Modus öffnet zuerst die wirksamen Freigaben; manuelle Ergänzungen erfolgen ausdrücklich und Ausschlüsse zeigen nur passende Freigaben.
 
 ## 🤝 Mitmachen & Rückmeldung
 

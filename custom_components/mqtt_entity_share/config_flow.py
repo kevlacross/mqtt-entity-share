@@ -113,14 +113,19 @@ class SelectionSteps:
             if names["read"] == names["control"] or resolved["read"] and resolved["read"] == resolved["control"]:
                 errors["base"] = "same_label"
             if not errors:
-                if self.mode == "labels":
-                    return await self.async_step_review()
-                return await self.async_step_filters()
+                return await self.async_step_review()
         fields = {}
+        registry = lr.async_get(self.hass)
+        choices = [{"value": label.label_id, "label": label.name}
+                   for label in sorted(registry.async_list_labels(), key=lambda label: (label.name.casefold(), label.label_id))]
         for role, suggestion in (("read", "MQTT-Share read"), ("control", "MQTT-Share control")):
             key = role + "_label"
-            label_field = vol.Optional(key, default=values[key]) if values.get(key) else vol.Optional(key)
-            fields[label_field] = selector.LabelSelector(selector.LabelSelectorConfig(multiple=False))
+            exists = values.get(key) and registry.async_get_label(values[key]) is not None
+            if values.get(key) and not exists:
+                errors[key] = "missing_label"
+            label_field = vol.Optional(key, default=values[key]) if exists else vol.Optional(key)
+            fields[label_field] = selector.SelectSelector(selector.SelectSelectorConfig(
+                options=choices, mode=selector.SelectSelectorMode.DROPDOWN))
             fields[vol.Optional(role + "_label_name", default=values.get(role + "_label_name", suggestion))] = str
         return self.async_show_form(step_id="labels", data_schema=vol.Schema(fields), errors=errors)
 
@@ -302,7 +307,9 @@ class SelectionSteps:
             fields[vol.Optional("entities", default=self.selected)] = checkboxes()
             fields[vol.Optional("control_entities", default=[e for e in self.control_entities or [] if e in self.selected])] = checkboxes()
         if self.mode == "hybrid":
-            candidates = sorted(set(eligible_entities(self.hass)) | set(self.exclude_entities or []))
+            # Exclusions only concern entities that would otherwise be shared.
+            options = {**self._options(), "exclude_entities": []}
+            candidates = sorted(resolve_permissions(self.hass, options).readable | set(self.exclude_entities or []))
             fields[vol.Optional("exclude_entities", default=self.exclude_entities or [])] = selector.EntitySelector(
                 selector.EntitySelectorConfig(multiple=True, include_entities=candidates))
         actions = ["confirm"]

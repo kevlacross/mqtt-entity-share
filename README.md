@@ -5,7 +5,7 @@
 **Connect two Home Assistant instances. Share selectively. Stay in control.**
 
 [![HACS Custom Repository](https://img.shields.io/badge/HACS-Custom_Repository-41BDF5?style=flat-square)](#installation)
-[![Version 0.6.0](https://img.shields.io/badge/Version-0.6.0-3b82f6?style=flat-square)](#project-status)
+[![Version 0.6.1](https://img.shields.io/badge/Version-0.6.1-3b82f6?style=flat-square)](#project-status)
 [![Home Assistant 2026.10+](https://img.shields.io/badge/Home_Assistant-2026.10%2B-18bcf2?style=flat-square)](#requirements)
 [![MIT License](https://img.shields.io/badge/License-MIT-22a987?style=flat-square)](LICENSE)
 
@@ -94,7 +94,7 @@ MQTT Entity Share manages sharing and the connection; the built-in MQTT integrat
 
 Open **MQTT Entity Share → Configure → View received devices** for a grouped overview with direct links to the original MQTT devices. They remain associated with the built-in MQTT integration; names, IDs and MQTT ownership are preserved.
 
-Want to filter received entities easily? In the sharing options, enable **“Automatically label received entities with MQTT-Share received”**. This is optional and **off by default**. The label is added to imported entities, including existing ones, and grants no sharing or control rights. Imported shares remain excluded from export.
+Want to filter received entities easily? In the sharing options, enable **“Automatically label received devices and entities with MQTT-Share received”**. This is optional and **off by default**. The label is added to imported devices and entities, including existing ones, and grants no sharing or control rights. Imported shares remain excluded from export.
 
 When you disable the option, only assignments added by this integration are removed. Existing labels you assigned yourself are preserved. Entities without a device can still receive the label, and are shown separately in the overview.
 
@@ -185,11 +185,11 @@ English and German. Home Assistant selects the interface translations; other lan
 
 ## 🧪 Project status
 
-**Early test release · currently 0.6.0**
+**Early test release · currently 0.6.1**
 
 Selection, permission checks and transport in both directions have been tested. Not every supported device type and command has been tested end to end. One integration entry per instance is supported.
 
-**New in 0.6.0:** Received devices can be viewed in the MQTT Entity Share options, with optional automatic labeling of received entities. English/German setup and the rapid label-update fix remain included.
+**New in 0.6.1:** Optional received labels now cover devices and entities. Existing-label choices show registry names reliably. Hybrid setup opens the effective sharing overview first; manual additions are explicit, and exclusion choices are limited to entities that would otherwise be shared.
 
 ## 🤝 Get involved
 

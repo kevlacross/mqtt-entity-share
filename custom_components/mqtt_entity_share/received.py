@@ -20,7 +20,9 @@ class ReceivedShares:
         self.store = Store(hass, 1, f"{DOMAIN}.{entry.entry_id}.received")
         self.entities = er.async_get(hass)
         self.labels = lr.async_get(hass)
+        self.devices = dr.async_get(hass)
         self.owned_labels = {}
+        self.owned_device_labels = {}
         self.label_enabled = False
         self.closed = False
         self.dirty = False
@@ -31,6 +33,7 @@ class ReceivedShares:
     async def _load(self):
         stored = await self.store.async_load() or {}
         self.owned_labels = stored.get("labels", {})
+        self.owned_device_labels = stored.get("device_labels", {})
 
     async def async_start(self):
         await self._load()
@@ -72,7 +75,8 @@ class ReceivedShares:
                     label = self.labels.async_create(RECEIVED_LABEL, icon="mdi:download-network")
                 label_id = label.label_id
             self._reconcile_labels(imported, label_id)
-            await self.store.async_save({"labels": self.owned_labels})
+            self._reconcile_device_labels({entity.device_id for entity in imported.values() if entity.device_id}, label_id)
+            await self.store.async_save({"labels": self.owned_labels, "device_labels": self.owned_device_labels})
 
     def _reconcile_labels(self, imported, label_id):
         # Only remove assignments this integration actually added.
@@ -89,6 +93,20 @@ class ReceivedShares:
                     self.entities.async_update_entity(entity_id, labels=set(entity.labels) | {label_id})
                     self.owned_labels[entity_id] = label_id
 
+    def _reconcile_device_labels(self, imported_devices, label_id):
+        for device_id, previous in list(self.owned_device_labels.items()):
+            if device_id not in imported_devices or previous != label_id:
+                device = self.devices.async_get(device_id)
+                if device and previous in device.labels:
+                    self.devices.async_update_device(device_id, labels=set(device.labels) - {previous})
+                self.owned_device_labels.pop(device_id)
+        if label_id:
+            for device_id in imported_devices:
+                device = self.devices.async_get(device_id)
+                if device and label_id not in device.labels:
+                    self.devices.async_update_device(device_id, labels=set(device.labels) | {label_id})
+                    self.owned_device_labels[device_id] = label_id
+
     async def async_stop(self):
         self.closed = True
         for unsubscribe in self.unsubscribers:
@@ -100,6 +118,7 @@ class ReceivedShares:
     async def async_remove(self):
         await self._load()
         self._reconcile_labels({}, None)
+        self._reconcile_device_labels(set(), None)
         await self.store.async_remove()
 
 
